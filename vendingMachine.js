@@ -25,6 +25,12 @@ class VendingMachine {
       throw new Error('正の金額を投入してください');
     }
     
+    // 硬貨のみ受け付ける（10円, 50円, 100円, 500円）
+    const validCoins = [10, 50, 100, 500];
+    if (!validCoins.includes(amount)) {
+      throw new Error('硬貨のみ対応しています');
+    }
+    
     this.insertedAmount += amount;
     
     // 自動返却タイマーをリセット
@@ -55,7 +61,8 @@ class VendingMachine {
   returnMoney() {
     const returnedAmount = this.insertedAmount;
     this.insertedAmount = 0;
-    
+    // 釣り銭から必要な金額を減らす
+    this.reduceChange(changeAmount);
     // タイマーをクリア
     if (this.timeoutId) {
       clearTimeout(this.timeoutId);
